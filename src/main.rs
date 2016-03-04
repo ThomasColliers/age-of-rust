@@ -9,7 +9,8 @@ implement_vertex!(Vertex, position);
 
 fn main() {
 	use glium::{DisplayBuild, Surface};
-	let display = glium::glutin::WindowBuilder::new().with_vsync().with_multisampling(16).build_glium().unwrap();
+	// can not do multisampling due to glutin bug with_multisampling(16)
+	let display = glium::glutin::WindowBuilder::new().with_vsync().build_glium().unwrap();
 
 	// draw parametres
 	let params = glium::DrawParameters {

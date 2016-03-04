@@ -4,9 +4,9 @@ Simple real-time strategy game written in Rust. Inspired mainly by Age of Empire
 # Roadmap
 - [ ] Basic map generation
 - [ ] Define basic assets
-- [ ] Set up glium and glutin
+- [x] Basic set up glium and GLFW
 - [x] Enable vsync
-- [ ] Enable AA
+- [ ] Enable AA (currently not possible due to glutin bug)
 - [ ] Enable AF
 - [ ] Basic rendering with orthographic camera set up
 - [ ] Perspective camera setup

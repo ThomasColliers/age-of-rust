@@ -2,7 +2,8 @@
 name = "age-of-rust"
 version = "0.1.0"
 dependencies = [
- "glium 0.13.5 (registry+https://github.com/rust-lang/crates.io-index)",
+ "glium 0.13.5 (git+https://github.com/tomaka/glium)",
+ "glutin 0.4.9 (git+https://github.com/ThomasColliers/glutin.git)",
 ]
 
 [[package]]
@@ -193,7 +194,7 @@ dependencies = [
 [[package]]
 name = "glium"
 version = "0.13.5"
-source = "registry+https://github.com/rust-lang/crates.io-index"
+source = "git+https://github.com/tomaka/glium#81f0cb2ca69c65039353512ca3944c5880666d9d"
 dependencies = [
  "backtrace 0.1.8 (registry+https://github.com/rust-lang/crates.io-index)",
  "gl_generator 0.3.0 (registry+https://github.com/rust-lang/crates.io-index)",
@@ -201,6 +202,35 @@ dependencies = [
  "khronos_api 0.0.8 (registry+https://github.com/rust-lang/crates.io-index)",
  "lazy_static 0.1.15 (registry+https://github.com/rust-lang/crates.io-index)",
  "smallvec 0.1.6 (registry+https://github.com/rust-lang/crates.io-index)",
+]
+
+[[package]]
+name = "glutin"
+version = "0.4.9"
+source = "git+https://github.com/ThomasColliers/glutin.git#e843206c1303475678482f623477408468b8a74b"
+dependencies = [
+ "android_glue 0.1.3 (registry+https://github.com/rust-lang/crates.io-index)",
+ "cgl 0.1.4 (registry+https://github.com/rust-lang/crates.io-index)",
+ "cocoa 0.2.4 (registry+https://github.com/rust-lang/crates.io-index)",
+ "core-foundation 0.2.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "core-graphics 0.2.1 (registry+https://github.com/rust-lang/crates.io-index)",
+ "dwmapi-sys 0.1.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "gdi32-sys 0.1.1 (registry+https://github.com/rust-lang/crates.io-index)",
+ "gl_generator 0.4.2 (registry+https://github.com/rust-lang/crates.io-index)",
+ "kernel32-sys 0.2.1 (registry+https://github.com/rust-lang/crates.io-index)",
+ "khronos_api 1.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "lazy_static 0.1.15 (registry+https://github.com/rust-lang/crates.io-index)",
+ "libc 0.2.7 (registry+https://github.com/rust-lang/crates.io-index)",
+ "objc 0.1.8 (registry+https://github.com/rust-lang/crates.io-index)",
+ "osmesa-sys 0.0.5 (registry+https://github.com/rust-lang/crates.io-index)",
+ "shared_library 0.1.4 (registry+https://github.com/rust-lang/crates.io-index)",
+ "shell32-sys 0.1.1 (registry+https://github.com/rust-lang/crates.io-index)",
+ "user32-sys 0.1.2 (registry+https://github.com/rust-lang/crates.io-index)",
+ "wayland-client 0.5.9 (registry+https://github.com/rust-lang/crates.io-index)",
+ "wayland-kbd 0.3.5 (registry+https://github.com/rust-lang/crates.io-index)",
+ "wayland-window 0.2.2 (registry+https://github.com/rust-lang/crates.io-index)",
+ "winapi 0.2.5 (registry+https://github.com/rust-lang/crates.io-index)",
+ "x11-dl 2.3.1 (registry+https://github.com/rust-lang/crates.io-index)",
 ]
 
 [[package]]
