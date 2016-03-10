@@ -4,6 +4,7 @@ version = "0.1.0"
 dependencies = [
  "glium 0.13.5 (git+https://github.com/tomaka/glium)",
  "glutin 0.4.9 (git+https://github.com/tomaka/glutin)",
+ "rand 0.3.14 (registry+https://github.com/rust-lang/crates.io-index)",
 ]
 
 [[package]]

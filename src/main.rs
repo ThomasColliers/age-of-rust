@@ -1,6 +1,8 @@
 #[macro_use]
 extern crate glium;
 
+extern crate rand;
+
 mod world;
 use world::terrain::Terrain;
 
@@ -25,7 +27,7 @@ fn main() {
 		.. Default::default()
 	};
 
-	let terrain = Terrain::new(20,None);
+	let terrain = Terrain::new(20);
 
 	/*
 	// init scene
