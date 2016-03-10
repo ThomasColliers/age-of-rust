@@ -13,6 +13,7 @@ pub enum TerrainType {
 #[derive(Debug)]
 pub struct Tile {
 	typ:TerrainType,
+	height:u16,
 }
 
 pub struct Terrain {
@@ -37,7 +38,7 @@ impl Terrain {
 		];
 		let mut rng = thread_rng();
 		for n in 0..(size*size) {
-			terrain.data.push(Tile { typ:*rng.choose(&choices).unwrap() });
+			terrain.data.push(Tile { typ:*rng.choose(&choices).unwrap(), height:0 });
 		}
 
 		println!("Terrain: {:?}",terrain.data);
