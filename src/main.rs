@@ -1,6 +1,9 @@
 #[macro_use]
 extern crate glium;
 
+mod world;
+use world::terrain::Terrain;
+
 #[derive(Copy, Clone)]
 struct Vertex {
 	position:[f32;2]
@@ -22,6 +25,9 @@ fn main() {
 		.. Default::default()
 	};
 
+	let terrain = Terrain::new(20,None);
+
+	/*
 	// init scene
 	// create a triangle
 	let vertex1 = Vertex { position: [-0.5,-0.5] };
@@ -50,7 +56,10 @@ fn main() {
 			color = vec4(1.0, 0.0, 0.0, 1.0);
 		}
 	"#;
-	let program = glium::Program::from_source(&display, vertex_shader_src, fragment_shader_src, None).unwrap();
+	let program = glium::Program::from_source(&display, vertex_shader_src, fragment_shader_src, None).unwrap();*/
+
+	// generate a terrain
+
 
     // listen for events produced in the window and wait to be received
     loop {
@@ -60,7 +69,7 @@ fn main() {
     	// clear the background
     	target.clear_color(0.0, 0.0, 0.0, 1.0);
 
-    	target.draw(&vertex_buffer,&indices,&program,&glium::uniforms::EmptyUniforms,&params).unwrap();
+    	//target.draw(&vertex_buffer,&indices,&program,&glium::uniforms::EmptyUniforms,&params).unwrap();
 
     	// finish drawing and destroy frame object
     	target.finish().unwrap();
