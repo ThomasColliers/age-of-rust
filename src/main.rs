@@ -6,11 +6,7 @@ extern crate rand;
 mod world;
 use world::terrain::Terrain;
 
-#[derive(Copy, Clone)]
-struct Vertex {
-	position:[f32;2]
-}
-implement_vertex!(Vertex, position);
+mod math3d;
 
 fn main() {
 	use glium::{DisplayBuild, Surface};
