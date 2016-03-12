@@ -1,6 +1,9 @@
+extern crate glium;
+
 use rand::{thread_rng, Rng};
 
 use math3d::Vertex;
+use glium::backend::Facade;
 
 #[derive(Debug, Copy, Clone)]
 pub enum TerrainType {
@@ -19,11 +22,11 @@ pub struct Tile {
 }
 
 pub struct Terrain {
-	data:Vec<Tile>
+	data:Vec<Tile>,
 }
 
 impl Terrain {
-	pub fn new(size:u16) -> Terrain {
+	pub fn new<F>(display: &F, size:u16) -> Terrain where F: Facade + Clone {
 		// create the terrain data
 		let mut terrain = Terrain {
 			data:Vec::with_capacity((size*size) as usize),
@@ -46,12 +49,12 @@ impl Terrain {
 		//println!("Terrain: {:?}",terrain.data);
 
 		// generate the geometry for the terrain
-		terrain.generate_geometry(size);
+		terrain.generate_geometry(display,size);
 
 		terrain
 	}
 
-	fn generate_geometry(&mut self, size:u16){
+	fn generate_geometry<F>(&mut self, display:&F, size:u16) where F: Facade + Clone {
 		// create the vertices
 		let mut vertices = Vec::new();
 		let size_f = size as f32;
@@ -61,7 +64,15 @@ impl Terrain {
 			let column = index % size;
 			vertices.push(Vertex { position:[column as f32, row as f32, self.data[index as usize].height], texcoords:[column as f32/size_f,row as f32/size_f], normal:[0f32,0f32,1f32] });
 		}
+
+		// create the vertex buffer
+		let vertex_buffer = glium::VertexBuffer::new(display,&vertices).unwrap();
+
+		// create the indices
+
 	}
+
+//let positions = glium::VertexBuffer::new(&display, &teapot::VERTICES).unwrap();
 
 	pub fn draw(&mut self){
 
