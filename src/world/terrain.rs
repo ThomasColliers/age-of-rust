@@ -69,7 +69,23 @@ impl Terrain {
 		let vertex_buffer = glium::VertexBuffer::new(display,&vertices).unwrap();
 
 		// create the indices
-		
+		let mut indices = Vec::new();
+		let columnsize = size - 1;
+		for index in 0..(columnsize*columnsize){
+			let row = index / columnsize;
+			let column = index % columnsize;
+			// build the 2 triangles for this square
+			let baseindex = row*size+column;
+			indices.push(baseindex as u16);
+			indices.push(baseindex+size as u16);
+			indices.push(baseindex+size+1 as u16 );
+			indices.push(baseindex as u16);
+			indices.push(baseindex+size+1 as u16);
+			indices.push(baseindex+1 as u16 );
+		}
+
+		// create the index buffer
+		let index_buffer = glium::IndexBuffer::new(display, glium::index::PrimitiveType::TrianglesList, &indices).unwrap();
 	}
 
 //let positions = glium::VertexBuffer::new(&display, &teapot::VERTICES).unwrap();

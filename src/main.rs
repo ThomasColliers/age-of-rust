@@ -22,7 +22,7 @@ fn main() {
 		.. Default::default()
 	};
 
-	let terrain = Terrain::new(&display,20);
+	let terrain = Terrain::new(&display,5);
 
 	/*
 	// init scene
