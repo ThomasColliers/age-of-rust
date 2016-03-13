@@ -69,7 +69,7 @@ impl Terrain {
 		let vertex_buffer = glium::VertexBuffer::new(display,&vertices).unwrap();
 
 		// create the indices
-
+		
 	}
 
 //let positions = glium::VertexBuffer::new(&display, &teapot::VERTICES).unwrap();

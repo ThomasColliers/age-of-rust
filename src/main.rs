@@ -10,15 +10,15 @@ mod math3d;
 fn main() {
 	use glium::{DisplayBuild, Surface};
 	// can not do multisampling due to glutin bug with_multisampling(16)
-	let display = glium::glutin::WindowBuilder::new().with_vsync().build_glium().unwrap();
+	let display = glium::glutin::WindowBuilder::new().with_vsync().with_depth_buffer(24).build_glium().unwrap();
 
 	// draw parametres
 	let params = glium::DrawParameters {
-		/*depth: glium::Depth {
+		depth: glium::Depth {
 			test:glium::DepthTest::IfLess,
 			write:true,
 			.. Default::default()
-		},*/
+		},
 		.. Default::default()
 	};
 
@@ -64,7 +64,7 @@ fn main() {
     	let mut target = display.draw();
 
     	// clear the background
-    	target.clear_color(0.0, 0.0, 0.0, 1.0);
+    	target.clear_color_and_depth((0.0, 0.0, 0.0, 1.0),1.0);
 
     	//target.draw(&vertex_buffer,&indices,&program,&glium::uniforms::EmptyUniforms,&params).unwrap();
 
