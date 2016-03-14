@@ -62,6 +62,7 @@ impl Terrain {
 			let index_f = index as f32;
 			let row = index / size;
 			let column = index % size;
+			// TODO: generate the actual normals
 			vertices.push(Vertex { position:[column as f32, row as f32, self.data[index as usize].height], texcoords:[column as f32/size_f,row as f32/size_f], normal:[0f32,0f32,1f32] });
 		}
 
@@ -87,8 +88,6 @@ impl Terrain {
 		// create the index buffer
 		let index_buffer = glium::IndexBuffer::new(display, glium::index::PrimitiveType::TrianglesList, &indices).unwrap();
 	}
-
-//let positions = glium::VertexBuffer::new(&display, &teapot::VERTICES).unwrap();
 
 	pub fn draw(&mut self){
 

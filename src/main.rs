@@ -5,6 +5,9 @@ extern crate rand;
 mod world;
 use world::terrain::Terrain;
 
+mod draw;
+use draw::shaders::ShaderManager;
+
 mod math3d;
 
 fn main() {
@@ -22,7 +25,12 @@ fn main() {
 		.. Default::default()
 	};
 
+	// build all the shaders
+	let shaderManager = ShaderManager::new(&display);
+
+	// create terrain
 	let terrain = Terrain::new(&display,5);
+
 
 	/*
 	// init scene
