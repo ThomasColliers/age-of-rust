@@ -5,6 +5,7 @@ use rand::{thread_rng, Rng};
 use math3d::Vertex;
 use glium::backend::Facade;
 use draw::display_object::DisplayInfo;
+use draw::shaders::ShaderManager;
 
 #[derive(Debug, Copy, Clone)]
 pub enum TerrainType {
@@ -28,11 +29,14 @@ pub struct Terrain<'a> {
 }
 
 impl<'a> Terrain<'a> {
-	pub fn new<F>(display: &F, size:u16) -> Terrain where F: Facade + Clone {
+	pub fn new<F>(display: &F, shader_manager: &ShaderManager, size:u16) -> Terrain<'a> where F: Facade + Clone {
+		// load the shader
+		let shader = shader_manager.load("identity.vert","identity.frag").unwrap();
+
 		// create the terrain data
 		let mut terrain = Terrain {
 			data:Vec::with_capacity((size*size) as usize),
-			display_info:DisplayInfo { x:0f32, y:0f32, z:0f32, shader:None }
+			display_info:DisplayInfo { x:0f32, y:0f32, z:0f32, shader:Some(shader) }
 		};
 		
 		// fill up the terrain with random tiles
@@ -42,7 +46,7 @@ impl<'a> Terrain<'a> {
 			TerrainType::TallGrass,
 			TerrainType::Sand,
 			TerrainType::Snow,
-			TerrainType::Tundra
+			TerrainType::Tundra,
 		];
 		let mut rng = thread_rng();
 		for n in 0..(size*size) {
@@ -50,6 +54,7 @@ impl<'a> Terrain<'a> {
 		}
 
 		//println!("Terrain: {:?}",terrain.data);
+
 
 		// generate the geometry for the terrain
 		terrain.generate_geometry(display,size);

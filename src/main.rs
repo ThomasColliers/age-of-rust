@@ -26,11 +26,10 @@ fn main() {
 	};
 
 	// build all the shaders
-	let shaderManager = ShaderManager::new(&display);
+	let shader_manager = ShaderManager::new(&display);
 
 	// create terrain
-	let terrain = Terrain::new(&display,5);
-
+	let terrain = Terrain::new(&display,&shader_manager,5);
 
 	/*
 	// init scene
@@ -62,8 +61,6 @@ fn main() {
 		}
 	"#;
 	let program = glium::Program::from_source(&display, vertex_shader_src, fragment_shader_src, None).unwrap();*/
-
-	// generate a terrain
 
 
     // listen for events produced in the window and wait to be received
