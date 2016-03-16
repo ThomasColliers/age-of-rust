@@ -4,6 +4,7 @@ use rand::{thread_rng, Rng};
 
 use math3d::Vertex;
 use glium::backend::Facade;
+use draw::display_object::DisplayInfo;
 
 #[derive(Debug, Copy, Clone)]
 pub enum TerrainType {
@@ -21,15 +22,17 @@ pub struct Tile {
 	height:f32,
 }
 
-pub struct Terrain {
+pub struct Terrain<'a> {
 	data:Vec<Tile>,
+	display_info:DisplayInfo<'a>,
 }
 
-impl Terrain {
+impl<'a> Terrain<'a> {
 	pub fn new<F>(display: &F, size:u16) -> Terrain where F: Facade + Clone {
 		// create the terrain data
 		let mut terrain = Terrain {
 			data:Vec::with_capacity((size*size) as usize),
+			display_info:DisplayInfo { x:0f32, y:0f32, z:0f32, shader:None }
 		};
 		
 		// fill up the terrain with random tiles

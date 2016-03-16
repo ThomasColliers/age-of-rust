@@ -31,6 +31,7 @@ struct ShaderSource {
 
 
 /* DEFINE SOME SHADER PROGRAMS */
+/*
 let identity_vertex:String = String::from(r#"
 	#version 430
 
@@ -49,5 +50,4 @@ const identity_fragment:String = String::from(r#"
 	void main(){
 		color = vec4(1.0, 0.0, 0.0, 1.0);
 	}
-"#);
-
+"#);*/
