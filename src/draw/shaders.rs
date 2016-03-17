@@ -3,9 +3,10 @@ extern crate glium;
 use std::collections::HashMap;
 use glium::program::Program;
 use glium::backend::Facade;
+use std::marker::PhantomData;
 
 pub struct ShaderManager {
-	shaders:HashMap<String,Program>
+	shaders:HashMap<String,Program>,
 }
 
 /*
