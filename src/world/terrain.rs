@@ -29,9 +29,9 @@ pub struct Terrain<'a> {
 }
 
 impl<'a> Terrain<'a> {
-	pub fn new<F>(display: &F, shader_manager: &'a ShaderManager, size:u16) -> Terrain<'a> where F: Facade + Clone {
+	pub fn new<F>(display: &F, shader_manager: &'a mut ShaderManager, size:u16) -> Terrain<'a> where F: Facade + Clone {
 		// load the shader
-		let shader = shader_manager.load("identity.vert","identity.frag").unwrap();
+		let shader = shader_manager.load(display,"identity.vert","identity.frag").unwrap();
 
 		// create the terrain data
 		let mut terrain = Terrain {

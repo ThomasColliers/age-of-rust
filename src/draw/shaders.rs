@@ -1,9 +1,13 @@
 extern crate glium;
 
+use std::error::Error;
 use std::collections::HashMap;
 use glium::program::Program;
 use glium::backend::Facade;
 use std::marker::PhantomData;
+use std::path::PathBuf;
+use std::fs::File;
+use std::io::prelude::*;
 
 pub struct ShaderManager {
 	shaders:HashMap<String,Program>,
@@ -23,9 +27,42 @@ impl ShaderManager {
 		}
 	}
 
-	pub fn load(&self, vertex: &str, fragment: &str) -> Result<&Program, &str> {
+	pub fn load<F>(&mut self, display: &F, vertex: &str, fragment: &str) -> Result<&Program, &str> where F: Facade + Clone {
+		// load the shader files
+		let vertex_shader_src = self.loadfile(vertex);
+		let fragment_shader_src = self.loadfile(fragment);
 
-		Err("Test")
+		// load them into the program and return it
+		let program = glium::Program::from_source(display, &vertex_shader_src[..], &fragment_shader_src[..], None).unwrap();
+
+		// temporary
+		let refer = &program;
+		// assign them to the hashmap
+		let mut key = vertex.to_owned();
+		key.push_str(";");
+		key.push_str(fragment);
+		self.shaders.insert(key,program);
+
+		Ok(&refer)
+	}
+
+	fn loadfile(&self, fname: &str) -> String {
+		// build the path
+		let mut path = PathBuf::from("./assets/shaders");
+		path.push(fname);
+
+		// load the file
+		let mut file = match File::open(&path){
+			Err(why) => panic!("couldn't open {}: {}", path.display(), Error::description(&why)),
+			Ok(file) => file,
+		};
+
+		// read the contents into a string
+		let mut s = String::new();
+		match file.read_to_string(&mut s){
+			Err(why) => panic!("couldn't read {}: {}", path.display(), Error::description(&why)),
+			Ok(_) => s
+		}
 	}
 }
 
