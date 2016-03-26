@@ -30,6 +30,7 @@ fn main() {
 
 	// create terrain
 	let terrain = Terrain::new(&display,&mut shader_manager,5);
+	let other = Terrain::new(&display,&mut shader_manager,3);
 
 	/*
 	// init scene

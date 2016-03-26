@@ -44,6 +44,16 @@ impl ShaderManager {
 	}
 
 	pub fn load<F>(&mut self, display: &F, vertex: &str, fragment: &str) -> Result<Rc<Program>, String> where F: Facade + Clone {
+		// build the key
+		let mut key = vertex.to_owned();
+		key.push_str(";");
+		key.push_str(fragment);
+
+		// check if it's loaded and compiled already
+		if self.shaders.contains_key(&key) {
+			return Ok(self.shaders.get(&key).unwrap().clone())
+		}
+
 		// open and read the files
 		let vertex_shader_src = match self.loadfile(vertex){
 			Err(why) => return Err(why),
@@ -62,9 +72,6 @@ impl ShaderManager {
 		let program = Rc::new(program);
 
 		// move the program into our hashmap
-		let mut key = vertex.to_owned();
-		key.push_str(";");
-		key.push_str(fragment);
 		self.shaders.insert(key,program.clone());
 
 		Ok(program.clone())
