@@ -9,18 +9,20 @@ use std::io::prelude::*;
 use std::fs::File;
 use std::error::Error;
 
+use std::rc::Rc;
+
 /*
  The shader manager loads and caches shaders
 */
 
 pub struct ShaderManager {
-	shaders:HashMap<String,Program>,
+	shaders:HashMap<String,Rc<Program>>
 }
 
 impl ShaderManager {
 	pub fn new<F>(display: &F) -> ShaderManager where F: Facade + Clone {
 		ShaderManager {
-			shaders:HashMap::new()
+			shaders:HashMap::new(),
 		}
 	}
 
@@ -41,7 +43,7 @@ impl ShaderManager {
 		}
 	}
 
-	pub fn load<F>(&mut self, display: &F, vertex: &str, fragment: &str) -> Result<&Program, String> where F: Facade + Clone {
+	pub fn load<F>(&mut self, display: &F, vertex: &str, fragment: &str) -> Result<Rc<Program>, String> where F: Facade + Clone {
 		// open and read the files
 		let vertex_shader_src = match self.loadfile(vertex){
 			Err(why) => return Err(why),
@@ -57,17 +59,15 @@ impl ShaderManager {
 			Err(why) => return Err(format!("Couldn't compile shader: {}",Error::description(&why))),
 			Ok(prog) => prog
 		};
-
-		// create reference to program
-		let refer = &program;
+		let program = Rc::new(program);
 
 		// move the program into our hashmap
 		let mut key = vertex.to_owned();
 		key.push_str(";");
 		key.push_str(fragment);
-		self.shaders.insert(key,program);
+		self.shaders.insert(key,program.clone());
 
-		Ok(&refer)
+		Ok(program.clone())
 	}
 }
 

@@ -23,13 +23,13 @@ pub struct Tile {
 	height:f32,
 }
 
-pub struct Terrain<'a> {
+pub struct Terrain {
 	data:Vec<Tile>,
-	display_info:DisplayInfo<'a>,
+	display_info:DisplayInfo,
 }
 
-impl<'a> Terrain<'a> {
-	pub fn new<F>(display: &F, shader_manager: &'a mut ShaderManager, size:u16) -> Terrain<'a> where F: Facade + Clone {
+impl Terrain {
+	pub fn new<F>(display: &F, shader_manager: &mut ShaderManager, size:u16) -> Terrain where F: Facade + Clone {
 		// load the shader
 		let shader = shader_manager.load(display,"identity.vert","identity.frag").unwrap();
 
