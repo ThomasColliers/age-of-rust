@@ -26,10 +26,10 @@ fn main() {
 	};
 
 	// build all the shaders
-	let shader_manager = ShaderManager::new(&display);
+	let mut shader_manager = ShaderManager::new(&display);
 
 	// create terrain
-	let terrain = Terrain::new(&display,&shader_manager,5);
+	let terrain = Terrain::new(&display,&mut shader_manager,5);
 
 	/*
 	// init scene
