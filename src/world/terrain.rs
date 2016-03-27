@@ -6,6 +6,8 @@ use math3d::Vertex;
 use glium::backend::Facade;
 use draw::display_object::DisplayInfo;
 use draw::shaders::ShaderManager;
+use glium::VertexBuffer;
+use glium::IndexBuffer;
 
 #[derive(Debug, Copy, Clone)]
 pub enum TerrainType {
@@ -26,6 +28,8 @@ pub struct Tile {
 pub struct Terrain {
 	data:Vec<Tile>,
 	display_info:DisplayInfo,
+	vertex_buffer:VertexBuffer<Vertex>,
+	index_buffer:IndexBuffer<u16>,
 }
 
 impl Terrain {
@@ -33,12 +37,6 @@ impl Terrain {
 		// load the shader
 		let shader = shader_manager.load(display,"identity.vert","identity.frag").unwrap();
 
-		// create the terrain data
-		let mut terrain = Terrain {
-			data:Vec::with_capacity((size*size) as usize),
-			display_info:DisplayInfo { x:0f32, y:0f32, z:0f32, shader:Some(shader) }
-		};
-		
 		// fill up the terrain with random tiles
 		let choices = [
 			TerrainType::Water,
@@ -49,20 +47,13 @@ impl Terrain {
 			TerrainType::Tundra,
 		];
 		let mut rng = thread_rng();
+		let mut terrain_data = Vec::with_capacity((size*size) as usize);
 		for n in 0..(size*size) {
-			terrain.data.push(Tile { typ:*rng.choose(&choices).unwrap(), height:0f32 });
+			terrain_data.push(Tile { typ:*rng.choose(&choices).unwrap(), height:0f32 });
 		}
 
-		//println!("Terrain: {:?}",terrain.data);
+		// generate the geometry
 
-
-		// generate the geometry for the terrain
-		terrain.generate_geometry(display,size);
-
-		terrain
-	}
-
-	fn generate_geometry<F>(&mut self, display:&F, size:u16) where F: Facade + Clone {
 		// create the vertices
 		let mut vertices = Vec::new();
 		let size_f = size as f32;
@@ -71,7 +62,7 @@ impl Terrain {
 			let row = index / size;
 			let column = index % size;
 			// TODO: generate the actual normals
-			vertices.push(Vertex { position:[column as f32, row as f32, self.data[index as usize].height], texcoords:[column as f32/size_f,row as f32/size_f], normal:[0f32,0f32,1f32] });
+			vertices.push(Vertex { position:[column as f32, row as f32, terrain_data[index as usize].height], texcoords:[column as f32/size_f,row as f32/size_f], normal:[0f32,0f32,1f32] });
 		}
 
 		// create the vertex buffer
@@ -95,9 +86,19 @@ impl Terrain {
 
 		// create the index buffer
 		let index_buffer = glium::IndexBuffer::new(display, glium::index::PrimitiveType::TrianglesList, &indices).unwrap();
+
+		// create the terrain data
+		let mut terrain = Terrain {
+			data:terrain_data,
+			display_info:DisplayInfo { x:0f32, y:0f32, z:0f32, shader:Some(shader) },
+			vertex_buffer:vertex_buffer,
+			index_buffer:index_buffer,
+		};
+
+		terrain
 	}
 
-	pub fn draw(&mut self){
-
+	pub fn draw(&mut self, target:&glium::Frame) {
+		
 	}
 }

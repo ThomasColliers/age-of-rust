@@ -29,7 +29,7 @@ fn main() {
 	let mut shader_manager = ShaderManager::new(&display);
 
 	// create terrain
-	let terrain = Terrain::new(&display,&mut shader_manager,5);
+	let mut terrain = Terrain::new(&display,&mut shader_manager,5);
 
     // listen for events produced in the window and wait to be received
     loop {
@@ -40,7 +40,8 @@ fn main() {
     	target.clear_color_and_depth((0.0, 0.0, 0.0, 1.0),1.0);
 
     	// draw the terrain
-    	
+    	terrain.draw(&target);
+    	//target.draw(terrain.get_vertex_buffer(),terrain.get_index_buffer(),terrain.get_shader(),&glium::uniforms::EmptyUniforms,&params).unwrap();
 
     	//target.draw(&vertex_buffer,&indices,&program,&glium::uniforms::EmptyUniforms,&params).unwrap();
 
