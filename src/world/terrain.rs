@@ -8,6 +8,7 @@ use draw::display_object::DisplayInfo;
 use draw::shaders::ShaderManager;
 use glium::VertexBuffer;
 use glium::IndexBuffer;
+use glium::Surface;
 
 #[derive(Debug, Copy, Clone)]
 pub enum TerrainType {
@@ -98,7 +99,8 @@ impl Terrain {
 		terrain
 	}
 
-	pub fn draw(&mut self, target:&glium::Frame) {
-		
+	pub fn draw(&mut self, target:&mut glium::Frame, params:&glium::DrawParameters) {
+		target.draw(&self.vertex_buffer,&self.index_buffer,self.display_info.shader.as_ref().unwrap(),&glium::uniforms::EmptyUniforms,params);
+		//target.draw(&vertex_buffer,&indices,&program,&glium::uniforms::EmptyUniforms,&params).unwrap();
 	}
 }
