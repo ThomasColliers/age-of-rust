@@ -1,5 +1,5 @@
 # Age of Rust
-Simple real-time strategy game written in Rust. Inspired mainly by Age of Empires and The Settlers.
+Learning Rust by making an OpenGL game.
 
 # Roadmap
 - [ ] Basic map generation
