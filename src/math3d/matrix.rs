@@ -1,11 +1,47 @@
 extern crate num;
-
 use num::Num;
+
+// Some macro's to create the implementations for all the fixed-size matrices
+
+// create matrix with zero values
+macro_rules! matrix_new(
+	($t: ident, $($index: ident),+) => (
+		impl<N: Num> $t<N> {
+			#[inline]
+			pub fn new() -> $t<N> {
+				$t {
+					$($index: num::zero()),+
+				}
+			}
+		}
+	)
+);
+
+// create identity matrix
+macro_rules! matrix_identity(
+	($t: ident, $($diag_index: ident),+) => (
+		impl<N: Num> $t<N> {
+			#[inline]
+			pub fn identity() -> $t<N> {
+				let mut mat: $t<N> = $t::new();
+				$(mat.$diag_index = num::one();)+
+				mat
+			}
+		}
+	)
+);
+
+// 1x1 Matrix
 
 #[derive(Eq, PartialEq, Clone, Hash, Debug, Copy)]
 pub struct Matrix1x1<N> {
 	pub m11:N,
 }
+
+matrix_new!(Matrix1x1,m11);
+matrix_identity!(Matrix1x1,m11);
+
+// 2x2 Matrix
 
 #[derive(Eq, PartialEq, Clone, Hash, Debug, Copy)]
 pub struct Matrix2x2<N>{
@@ -13,12 +49,22 @@ pub struct Matrix2x2<N>{
 	pub m12:N, pub m22:N,
 }
 
+matrix_new!(Matrix2x2,m11,m12,m21,m22);
+matrix_identity!(Matrix2x2,m11,m22);
+
+// 3x3 Matrix
+
 #[derive(Eq, PartialEq, Clone, Hash, Debug, Copy)]
 pub struct Matrix3x3<N> {
 	pub m11:N, pub m21:N, pub m31:N,
 	pub m12:N, pub m22:N, pub m32:N,
 	pub m13:N, pub m23:N, pub m33:N,
 }
+
+matrix_new!(Matrix3x3,m11,m21,m31,m12,m22,m32,m13,m23,m33);
+matrix_identity!(Matrix3x3,m11,m22,m33);
+
+// 4x4 Matrix
 
 #[derive(Eq, PartialEq, Clone, Hash, Debug, Copy)]
 pub struct Matrix4x4<N> {
@@ -28,15 +74,5 @@ pub struct Matrix4x4<N> {
 	pub m14:N, pub m24:N, pub m34:N, pub m44:N,
 }
 
-// TODO: make this into a macro so I can easily generate this for all the matrix types
-impl<N: Num> Matrix4x4<N> {
-	#[inline]
-	pub fn identity() -> Matrix4x4<N> {
-		Matrix4x4::<N> {
-			m11:num::one(),m21:num::zero(),m31:num::zero(),m41:num::zero(),
-			m12:num::zero(),m22:num::one(),m32:num::zero(),m42:num::zero(),
-			m13:num::zero(),m23:num::zero(),m33:num::one(),m43:num::zero(),
-			m14:num::zero(),m24:num::zero(),m34:num::zero(),m44:num::one(),
-		}
-	}
-}
+matrix_new!(Matrix4x4,m11,m21,m31,m41,m12,m22,m32,m42,m13,m23,m33,m43,m14,m24,m34,m44);
+matrix_identity!(Matrix4x4,m11,m22,m33,m44);
