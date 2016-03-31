@@ -1,6 +1,6 @@
 extern crate num;
 
-use num::{Num};
+use num::Num;
 
 #[derive(Eq, PartialEq, Clone, Hash, Debug, Copy)]
 pub struct Matrix1x1<N> {
@@ -28,8 +28,9 @@ pub struct Matrix4x4<N> {
 	pub m14:N, pub m24:N, pub m34:N, pub m44:N,
 }
 
-// TODO: make this into a macro so I can easily generate this
+// TODO: make this into a macro so I can easily generate this for all the matrix types
 impl<N: Num> Matrix4x4<N> {
+	#[inline]
 	pub fn identity() -> Matrix4x4<N> {
 		Matrix4x4::<N> {
 			m11:num::one(),m21:num::zero(),m31:num::zero(),m41:num::zero(),
