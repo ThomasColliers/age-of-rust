@@ -10,7 +10,7 @@ pub struct MatrixStack {
 impl MatrixStack {
 	// initialization with a identity shader
 	pub fn new() -> MatrixStack {
-		let mut initial = Vec::new();
+		let mut initial = Vec::with_capacity(5);
 		initial.push(Matrix4x4::<f32>::identity());
 		MatrixStack { stack:initial }
 	}

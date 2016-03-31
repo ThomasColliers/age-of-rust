@@ -35,18 +35,7 @@ fn main() {
 	// set up the transformation pipeline
 	let mut transform_pipeline = TransformPipeline::new(&model_view_matrix,&projection_matrix);
 
-	/*let mtrx = Matrix4x4::<f32> {
-		m11:1f32,m21:0f32,m31:0f32,m41:0f32,
-		m12:0f32,m22:1f32,m32:0f32,m42:0f32,
-		m13:0f32,m23:0f32,m33:1f32,m43:0f32,
-		m14:0f32,m24:0f32,m34:0f32,m44:1f32,
-	};*/
-	//let mtrx = Matrix4x4::<f32>::identity();
-	//println!("Matrix: {:?}",mtrx);
-	//let mut model_view_matrix = MatrixStack::new();
-	//let mut projection_matrix = MatrixStack::new();
-
-	// build all the shaders
+	// setup the shaders
 	let mut shader_manager = ShaderManager::new(&display);
 
 	// create terrain
