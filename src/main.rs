@@ -10,6 +10,7 @@ mod draw;
 use draw::shaders::ShaderManager;
 use draw::matrix_stack::MatrixStack;
 use draw::transform_pipeline::TransformPipeline;
+use draw::frustum::Frustum;
 
 mod math3d;
 
@@ -34,6 +35,9 @@ fn main() {
 
 	// set up the transformation pipeline
 	let mut transform_pipeline = TransformPipeline::new(&model_view_matrix,&projection_matrix);
+
+	// view frustum
+	let mut frustum = Frustum::<f32>::new();
 
 	// setup the shaders
 	let mut shader_manager = ShaderManager::new(&display);
