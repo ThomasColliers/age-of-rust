@@ -38,6 +38,8 @@ fn main() {
 
 	// view frustum
 	let mut frustum = Frustum::<f32>::new();
+	let display_size = display.get_window().unwrap().get_inner_size_pixels().unwrap();
+	frustum.set_perspective(35f32,display_size.0 as f32/display_size.1 as f32,1f32,5000f32);
 
 	// setup the shaders
 	let mut shader_manager = ShaderManager::new(&display);
