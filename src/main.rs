@@ -67,6 +67,9 @@ fn main() {
 	    for ev in display.poll_events(){
 	    	match ev {
 	    		glium::glutin::Event::Closed => return,
+	    		glium::glutin::Event::Resized(width, height) => {
+	    			frustum.set_perspective(35f32,width as f32/height as f32,1f32,5000f32);
+	    		},
 	    		_ => ()
 	    	}
 	    }
