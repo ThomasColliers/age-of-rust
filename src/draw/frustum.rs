@@ -16,7 +16,7 @@ impl<N: Float+NumCast+Zero+One> Frustum<N> {
 	}
 	pub fn set_perspective(&mut self, fov:N, aspect_ratio:N, near:N, far:N){
         // calculate the near clipping plane
-		let nymax = near * (fov * cast(f32::consts::PI).unwrap() / cast(360).unwrap()).tan();
+	let nymax = near * (fov * cast(f32::consts::PI).unwrap() / cast(360).unwrap()).tan();
         let nymin = -nymax;
         let nxmin = nymin * aspect_ratio;
         let nxmax = -nxmin;

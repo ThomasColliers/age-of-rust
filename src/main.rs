@@ -40,6 +40,8 @@ fn main() {
 	let mut frustum = Frustum::<f32>::new();
 	let display_size = display.get_window().unwrap().get_inner_size_pixels().unwrap();
 	frustum.set_perspective(35f32,display_size.0 as f32/display_size.1 as f32,1f32,5000f32);
+	// update the projection matrix
+	projection_matrix.load_matrix(frustum.projection_matrix.clone());
 
 	// setup the shaders
 	let mut shader_manager = ShaderManager::new(&display);
@@ -68,7 +70,9 @@ fn main() {
 	    	match ev {
 	    		glium::glutin::Event::Closed => return,
 	    		glium::glutin::Event::Resized(width, height) => {
+	    			// update the view frustum and projection matrix
 	    			frustum.set_perspective(35f32,width as f32/height as f32,1f32,5000f32);
+	    			projection_matrix.load_matrix(frustum.projection_matrix.clone());
 	    		},
 	    		_ => ()
 	    	}
