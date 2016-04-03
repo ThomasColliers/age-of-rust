@@ -5,10 +5,11 @@ use glium::program::Program;
 use math3d::vector::Vector3;
 use std::rc::Rc;
 
-trait HasFrame<T> {
-	fn frame(&self) -> &Frame<T>;
+pub trait HasFrame<T> {
+	fn get_frame(&self) -> &Frame<T>;
 }
 
+#[derive(Eq, PartialEq, Clone, Hash, Debug, Copy)]
 pub struct Frame<T> {
 	origin:Vector3<T>,
 	forward:Vector3<T>,
@@ -44,8 +45,8 @@ impl<T: Float+Num+NumCast+Zero+One> Frame<T> {
 	}
 }
 
-trait Drawable {
-	fn draw(&self);
+pub trait Drawable {
+	fn draw(&self,target:&mut glium::Frame,params:&glium::DrawParameters);
 }
 
 /*

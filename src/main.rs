@@ -10,6 +10,7 @@ mod draw;
 use draw::shaders::ShaderManager;
 use draw::matrix_stack::MatrixStack;
 use draw::frustum::Frustum;
+use draw::display_object::Drawable;
 
 mod math3d;
 
@@ -43,7 +44,7 @@ fn main() {
 	let mut shader_manager = ShaderManager::new(&display);
 
 	// create terrain
-	let mut terrain = Terrain::new(&display,&mut shader_manager,5);
+	let terrain = Terrain::new(&display,&mut shader_manager,5);
 
     // listen for events produced in the window and wait to be received
     loop {

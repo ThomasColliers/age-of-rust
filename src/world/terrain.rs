@@ -5,7 +5,7 @@ use std::rc::Rc;
 
 use math3d::Vertex;
 use glium::backend::Facade;
-use draw::display_object::Frame;
+use draw::display_object::{Frame,Drawable,HasFrame};
 use draw::shaders::ShaderManager;
 use glium::program::Program;
 use glium::{VertexBuffer,IndexBuffer,Surface};
@@ -92,17 +92,27 @@ impl Terrain {
 		// create the terrain data
 		let mut terrain = Terrain {
 			data:terrain_data,
-			frame:Frame::new(),
+			frame:Frame::<f32>::new(),
 			shader:shader,
 			vertex_buffer:vertex_buffer,
 			index_buffer:index_buffer,
 		};
 
+		println!("{:?}", terrain.frame);
+
 		terrain
 	}
+}
 
-	pub fn draw(&mut self, target:&mut glium::Frame, params:&glium::DrawParameters) {
+impl Drawable for Terrain {
+	fn draw(&self, target:&mut glium::Frame, params:&glium::DrawParameters) {
 		target.draw(&self.vertex_buffer,&self.index_buffer,self.shader.as_ref(),&glium::uniforms::EmptyUniforms,params);
 		//target.draw(&vertex_buffer,&indices,&program,&glium::uniforms::EmptyUniforms,&params).unwrap();
+	}
+}
+
+impl HasFrame<f32> for Terrain {
+	fn get_frame(&self) -> &Frame<f32> {
+		&self.frame
 	}
 }
