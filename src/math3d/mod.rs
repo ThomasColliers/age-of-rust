@@ -1,4 +1,5 @@
 pub mod matrix;
+pub mod vector;
 
 #[derive(Copy, Clone)]
 pub struct Vertex {

@@ -17,10 +17,11 @@ impl MatrixStack {
 
 	pub fn load_identity(&mut self){
 		let len = self.stack.len();
-		self.stack[len] = Matrix4x4::<f32>::identity();
+		self.stack[len-1] = Matrix4x4::<f32>::identity();
 	}
 	pub fn load_matrix(&mut self, mtrx:Matrix4x4<f32>){
-		self.stack.push(mtrx);
+		let len = self.stack.len();
+		self.stack[len-1] = mtrx;
 	}
 	pub fn mult_matrix(&mut self){
 
