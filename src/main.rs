@@ -9,7 +9,6 @@ use world::terrain::Terrain;
 mod draw;
 use draw::shaders::ShaderManager;
 use draw::matrix_stack::MatrixStack;
-use draw::transform_pipeline::TransformPipeline;
 use draw::frustum::Frustum;
 
 mod math3d;
@@ -32,9 +31,6 @@ fn main() {
 	// set up the matrix stacks
 	let mut model_view_matrix = MatrixStack::new();
 	let mut projection_matrix = MatrixStack::new();
-
-	// set up the transformation pipeline
-	let mut transform_pipeline = TransformPipeline::new(&model_view_matrix,&projection_matrix);
 
 	// view frustum
 	let mut frustum = Frustum::<f32>::new();
