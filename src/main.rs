@@ -1,18 +1,20 @@
 #[macro_use]
 extern crate glium;
+
 extern crate rand;
 extern crate num;
 
 mod world;
-use world::terrain::Terrain;
-
+mod math3d;
 mod draw;
+
+use world::terrain::Terrain;
 use draw::shaders::ShaderManager;
 use draw::matrix_stack::MatrixStack;
 use draw::frustum::Frustum;
 use draw::display_object::Drawable;
 
-mod math3d;
+
 
 fn main() {
 	use glium::{DisplayBuild, Surface};
@@ -47,7 +49,12 @@ fn main() {
 	let terrain = Terrain::new(&display,&mut shader_manager,5);
 
     // listen for events produced in the window and wait to be received
+    let mut t:f32 = 0.0;
     loop {
+    	t += 0.002;
+    	if t > 0.5 {
+    		t = -0.5;
+    	}
     	// get reference to the frame
     	let mut target = display.draw();
 
@@ -55,7 +62,8 @@ fn main() {
     	target.clear_color_and_depth((0.0, 0.0, 0.0, 1.0),1.0);
 
     	// draw the terrain
-    	terrain.draw(&mut target,&params);
+
+    	terrain.draw(&mut target,&params,t);
     	//target.draw(terrain.get_vertex_buffer(),terrain.get_index_buffer(),terrain.get_shader(),&glium::uniforms::EmptyUniforms,&params).unwrap();
 
     	//target.draw(&vertex_buffer,&indices,&program,&glium::uniforms::EmptyUniforms,&params).unwrap();

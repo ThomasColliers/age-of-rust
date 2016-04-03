@@ -105,8 +105,8 @@ impl Terrain {
 }
 
 impl Drawable for Terrain {
-	fn draw(&self, target:&mut glium::Frame, params:&glium::DrawParameters) {
-		target.draw(&self.vertex_buffer,&self.index_buffer,self.shader.as_ref(),&glium::uniforms::EmptyUniforms,params);
+	fn draw(&self, target:&mut glium::Frame, params:&glium::DrawParameters, t:f32) {
+		target.draw(&self.vertex_buffer,&self.index_buffer,self.shader.as_ref(),&uniform! { t:t },params);
 		//target.draw(&vertex_buffer,&indices,&program,&glium::uniforms::EmptyUniforms,&params).unwrap();
 	}
 }

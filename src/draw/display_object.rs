@@ -18,7 +18,7 @@ pub struct Frame<T> {
 
 impl<T: Float+Num+NumCast+Zero+One> Frame<T> {
 	pub fn new() -> Frame<T> {
-		// TODO: initialise with different forward and up vectors
+		// TODO: use quaternion instead
 		Frame::<T> {
 			origin:Vector3::<T>::new(),
 			forward:Vector3::<T> {
@@ -46,15 +46,5 @@ impl<T: Float+Num+NumCast+Zero+One> Frame<T> {
 }
 
 pub trait Drawable {
-	fn draw(&self,target:&mut glium::Frame,params:&glium::DrawParameters);
+	fn draw(&self,target:&mut glium::Frame,params:&glium::DrawParameters,t:f32);
 }
-
-/*
-// TODO: rotation quaternion
-pub struct DisplayInfo {
-	pub x:f32,
-	pub y:f32,
-	pub z:f32,
-	pub shader:Option<Rc<Program>>
-}
-*/
