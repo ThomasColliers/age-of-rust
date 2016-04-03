@@ -1,5 +1,5 @@
 extern crate glium;
-use num::Num;
+use num::{Num,NumCast,Float,Zero,One};
 
 use glium::program::Program;
 use math3d::vector::Vector3;
@@ -15,13 +15,21 @@ pub struct Frame<T> {
 	up:Vector3<T>,
 }
 
-impl<T: Num> Frame<T> {
+impl<T: Float+Num+NumCast+Zero+One> Frame<T> {
 	pub fn new() -> Frame<T> {
 		// TODO: initialise with different forward and up vectors
 		Frame::<T> {
 			origin:Vector3::<T>::new(),
-			forward:Vector3::<T>::new(),
-			up:Vector3::<T>::new(),
+			forward:Vector3::<T> {
+				x:T::zero(),
+				y:T::zero(),
+				z:T::one(),
+			},
+			up:Vector3::<T> {
+				x:T::zero(),
+				y:T::one(),
+				z:T::zero(),
+			},
 		}
 	}
 
