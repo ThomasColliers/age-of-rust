@@ -2,6 +2,10 @@
 
 in vec3 position;
 
+uniform float t;
+
 void main(){
-	gl_Position = vec4(position[0], position[1], 0.0, 1.0);
+	vec3 pos = position;
+	pos[0] += t;
+	gl_Position = vec4(pos[0], pos[1], 0.0, 1.0);
 }

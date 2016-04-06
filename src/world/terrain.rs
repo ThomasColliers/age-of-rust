@@ -1,14 +1,14 @@
 extern crate glium;
 
 use rand::{thread_rng, Rng};
+use std::rc::Rc;
 
 use math3d::Vertex;
 use glium::backend::Facade;
-use draw::display_object::DisplayInfo;
+use draw::display_object::{Frame,Drawable,HasFrame};
 use draw::shaders::ShaderManager;
-use glium::VertexBuffer;
-use glium::IndexBuffer;
-use glium::Surface;
+use glium::program::Program;
+use glium::{VertexBuffer,IndexBuffer,Surface};
 
 #[derive(Debug, Copy, Clone)]
 pub enum TerrainType {
@@ -28,7 +28,8 @@ pub struct Tile {
 
 pub struct Terrain {
 	data:Vec<Tile>,
-	display_info:DisplayInfo,
+	frame:Frame<f32>,
+	shader:Rc<Program>,
 	vertex_buffer:VertexBuffer<Vertex>,
 	index_buffer:IndexBuffer<u16>,
 }
@@ -91,16 +92,27 @@ impl Terrain {
 		// create the terrain data
 		let mut terrain = Terrain {
 			data:terrain_data,
-			display_info:DisplayInfo { x:0f32, y:0f32, z:0f32, shader:Some(shader) },
+			frame:Frame::<f32>::new(),
+			shader:shader,
 			vertex_buffer:vertex_buffer,
 			index_buffer:index_buffer,
 		};
 
+		println!("{:?}", terrain.frame);
+
 		terrain
 	}
+}
 
-	pub fn draw(&mut self, target:&mut glium::Frame, params:&glium::DrawParameters) {
-		target.draw(&self.vertex_buffer,&self.index_buffer,self.display_info.shader.as_ref().unwrap(),&glium::uniforms::EmptyUniforms,params);
+impl Drawable for Terrain {
+	fn draw(&self, target:&mut glium::Frame, params:&glium::DrawParameters, t:f32) {
+		target.draw(&self.vertex_buffer,&self.index_buffer,self.shader.as_ref(),&uniform! { t:t },params);
 		//target.draw(&vertex_buffer,&indices,&program,&glium::uniforms::EmptyUniforms,&params).unwrap();
+	}
+}
+
+impl HasFrame<f32> for Terrain {
+	fn get_frame(&self) -> &Frame<f32> {
+		&self.frame
 	}
 }

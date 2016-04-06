@@ -15,5 +15,22 @@ impl MatrixStack {
 		MatrixStack { stack:initial }
 	}
 
-	
+	pub fn load_identity(&mut self){
+		let len = self.stack.len();
+		self.stack[len-1] = Matrix4x4::<f32>::identity();
+	}
+	pub fn load_matrix(&mut self, mtrx:Matrix4x4<f32>){
+		let len = self.stack.len();
+		self.stack[len-1] = mtrx;
+	}
+	pub fn mult_matrix(&mut self){
+
+	}
+	pub fn push(&mut self){
+		let mut new = self.stack.last().unwrap().clone();
+		self.stack.push(new);
+	}
+	pub fn pop(&mut self){
+		self.stack.pop();
+	}
 }
