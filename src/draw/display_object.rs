@@ -3,7 +3,7 @@ extern crate glium;
 use num::{Num,NumCast,Float,Zero,One};
 
 use glium::program::Program;
-use na::{Vec3};
+use na::{Vec3,Mat4};
 use std::rc::Rc;
 
 pub trait HasFrame<T> {
@@ -39,5 +39,5 @@ impl<T: Float+Num+NumCast+Zero+One> Frame<T> {
 }
 
 pub trait Drawable {
-	fn draw(&self,target:&mut glium::Frame,params:&glium::DrawParameters,t:f32);
+	fn draw(&self,target:&mut glium::Frame,params:&glium::DrawParameters, mvp_matrix:&Mat4<f32>);
 }

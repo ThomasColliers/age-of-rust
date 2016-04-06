@@ -4,6 +4,7 @@ extern crate glium;
 extern crate nalgebra as na;
 extern crate rand;
 extern crate num;
+extern crate time;
 
 mod world;
 mod draw;
@@ -31,14 +32,14 @@ fn main() {
 	};
 
 	// set up the matrix stacks
-	let mut model_view_matrix = MatrixStack::new();
-	let mut projection_matrix = MatrixStack::new();
+	let mut modelview_stack = MatrixStack::new();
+	let mut projection_stack = MatrixStack::new();
 
 	// view frustum
 	let display_size = display.get_window().unwrap().get_inner_size_pixels().unwrap();
 	let mut frustum = PerspMat3::<f32>::new(display_size.0 as f32/display_size.1 as f32, 35f32, 1f32, 5000f32);
 	// update the projection matrix
-	projection_matrix.load_matrix(frustum.as_mat().clone());
+	projection_stack.load_matrix(frustum.as_mat().clone());
 
 	// setup the shaders
 	let mut shader_manager = ShaderManager::new(&display);
@@ -47,12 +48,12 @@ fn main() {
 	let terrain = Terrain::new(&display,&mut shader_manager,5);
 
     // listen for events produced in the window and wait to be received
-    let mut t:f32 = 0.0;
+    let mut t:u64 = time::precise_time_ns();
     loop {
-    	t += 0.002;
-    	if t > 0.5 {
-    		t = -0.5;
-    	}
+    	let nt = time::precise_time_ns();
+    	let dt = nt - t;
+    	t = nt;
+
     	// get reference to the frame
     	let mut target = display.draw();
 
@@ -60,8 +61,8 @@ fn main() {
     	target.clear_color_and_depth((0.0, 0.0, 0.0, 1.0),1.0);
 
     	// draw the terrain
-
-    	terrain.draw(&mut target,&params,t);
+    	let mvp_matrix = projection_stack.get_matrix() * modelview_stack.get_matrix();
+    	terrain.draw(&mut target,&params,&mvp_matrix);
     	//target.draw(terrain.get_vertex_buffer(),terrain.get_index_buffer(),terrain.get_shader(),&glium::uniforms::EmptyUniforms,&params).unwrap();
 
     	//target.draw(&vertex_buffer,&indices,&program,&glium::uniforms::EmptyUniforms,&params).unwrap();
@@ -75,7 +76,7 @@ fn main() {
 	    		glium::glutin::Event::Resized(width, height) => {
 	    			// update the view frustum and projection matrix
 	    			frustum.set_aspect(width as f32/height as f32);
-	    			projection_matrix.load_matrix(frustum.as_mat().clone());
+	    			projection_stack.load_matrix(frustum.as_mat().clone());
 	    		},
 	    		_ => ()
 	    	}

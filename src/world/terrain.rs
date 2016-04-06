@@ -9,6 +9,8 @@ use draw::display_object::{Frame,Drawable,HasFrame};
 use draw::shaders::ShaderManager;
 use glium::program::Program;
 use glium::{VertexBuffer,IndexBuffer,Surface};
+use na::{Mat4};
+use glium::uniforms::AsUniformValue;
 
 #[derive(Debug, Copy, Clone)]
 pub enum TerrainType {
@@ -105,8 +107,8 @@ impl Terrain {
 }
 
 impl Drawable for Terrain {
-	fn draw(&self, target:&mut glium::Frame, params:&glium::DrawParameters, t:f32) {
-		target.draw(&self.vertex_buffer,&self.index_buffer,self.shader.as_ref(),&uniform! { t:t },params);
+	fn draw(&self, target:&mut glium::Frame, params:&glium::DrawParameters, mvp_matrix:&Mat4<f32>) {
+		target.draw(&self.vertex_buffer,&self.index_buffer,self.shader.as_ref(),&uniform! { mvpMatrix:mvp_matrix },params);
 		//target.draw(&vertex_buffer,&indices,&program,&glium::uniforms::EmptyUniforms,&params).unwrap();
 	}
 }

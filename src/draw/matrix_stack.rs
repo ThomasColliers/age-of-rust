@@ -23,8 +23,8 @@ impl MatrixStack {
 		let len = self.stack.len();
 		self.stack[len-1] = mtrx;
 	}
-	pub fn mult_matrix(&mut self){
-
+	pub fn get_matrix(&mut self) -> &Mat4<f32> {
+		return &self.stack.last();
 	}
 	pub fn push(&mut self){
 		let mut new = self.stack.last().unwrap().clone();

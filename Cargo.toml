@@ -9,3 +9,4 @@ glutin = { git = "https://github.com/tomaka/glutin" }
 rand = "*"
 num = "*"
 nalgebra = "*"
+time = "*"

@@ -2,10 +2,9 @@
 
 in vec3 position;
 
-uniform float t;
+uniform mat4 mvpMatrix;
 
 void main(){
-	vec3 pos = position;
-	pos[0] += t;
-	gl_Position = vec4(pos[0], pos[1], 0.0, 1.0);
+	vec4 pos = vec4(position, 1.0);
+	gl_Position = mvpMatrix * pos;
 }
