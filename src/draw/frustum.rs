@@ -1,17 +1,17 @@
-use math3d::matrix::Matrix4x4;
+use na::{Mat4,Eye};
 use num::{Float,NumCast,cast,Zero,One};
 use std::f32;
 
 #[derive(Eq, PartialEq, Clone, Hash, Debug, Copy)]
 pub struct Frustum<N: Float> {
-	pub projection_matrix:Matrix4x4<N>
+	pub projection_matrix:Mat4<N>
 }
 
 // TODO: number casting might not be ideal for performance, maybe use traits to improve this
 impl<N: Float+NumCast+Zero+One> Frustum<N> {
 	pub fn new() -> Frustum<N> {
 		Frustum {
-			projection_matrix:Matrix4x4::<N>::identity()
+			projection_matrix:Mat4::<N>::new_identity(4)
 		}
 	}
 
@@ -26,7 +26,7 @@ impl<N: Float+NumCast+Zero+One> Frustum<N> {
                 let zero = N::zero();
                 let one = N::one();
                 let two = one + one;
-                self.projection_matrix = Matrix4x4::<N>::identity();
+                self.projection_matrix = Mat4::<N>::new_identity(4);
                 self.projection_matrix.m11 = (two * near) / (nxmax - nxmin);
                 self.projection_matrix.m22 = (two * near) / (nymax - nymin);
                 self.projection_matrix.m31 = (nxmax + nxmin) / (nxmax - nxmin);
@@ -41,7 +41,7 @@ impl<N: Float+NumCast+Zero+One> Frustum<N> {
                 let zero = N::zero();
                 let one = N::one();
                 let two = one + one;
-                self.projection_matrix = Matrix4x4::<N>::identity();
+                self.projection_matrix = Mat4::<N>::new_identity(4);
                 self.projection_matrix.m11 = two / (xmax - xmin);
                 self.projection_matrix.m22 = two / (ymax - ymin);
                 self.projection_matrix.m33 = -two / (zmax - zmin);

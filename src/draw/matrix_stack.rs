@@ -1,25 +1,25 @@
-use math3d::matrix::Matrix4x4;
+use na::{Mat4,Eye};
 
 // a matrix stack to store and pop transformations
 // the matrix stack needs to own its matrices, either through copying or moving
 
 pub struct MatrixStack {
-	stack:Vec<Matrix4x4<f32>>,
+	stack:Vec<Mat4<f32>>,
 }
 
 impl MatrixStack {
 	// initialization with a identity shader
 	pub fn new() -> MatrixStack {
 		let mut initial = Vec::with_capacity(5);
-		initial.push(Matrix4x4::<f32>::identity());
+		initial.push(Mat4::<f32>::new_identity(4));
 		MatrixStack { stack:initial }
 	}
 
 	pub fn load_identity(&mut self){
 		let len = self.stack.len();
-		self.stack[len-1] = Matrix4x4::<f32>::identity();
+		self.stack[len-1] = Mat4::<f32>::new_identity(4);
 	}
-	pub fn load_matrix(&mut self, mtrx:Matrix4x4<f32>){
+	pub fn load_matrix(&mut self, mtrx:Mat4<f32>){
 		let len = self.stack.len();
 		self.stack[len-1] = mtrx;
 	}

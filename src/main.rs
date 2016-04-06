@@ -1,11 +1,11 @@
 #[macro_use]
 extern crate glium;
 
+extern crate nalgebra as na;
 extern crate rand;
 extern crate num;
 
 mod world;
-mod math3d;
 mod draw;
 
 use world::terrain::Terrain;

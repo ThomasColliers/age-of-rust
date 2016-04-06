@@ -3,7 +3,7 @@ extern crate glium;
 use rand::{thread_rng, Rng};
 use std::rc::Rc;
 
-use math3d::Vertex;
+use draw::Vertex;
 use glium::backend::Facade;
 use draw::display_object::{Frame,Drawable,HasFrame};
 use draw::shaders::ShaderManager;

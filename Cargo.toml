@@ -8,3 +8,4 @@ glium = { git = "https://github.com/tomaka/glium" }
 glutin = { git = "https://github.com/tomaka/glutin" }
 rand = "*"
 num = "*"
+nalgebra = "*"
