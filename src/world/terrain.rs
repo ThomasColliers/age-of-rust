@@ -2,8 +2,6 @@ extern crate glium;
 
 use rand::{thread_rng, Rng};
 use std::rc::Rc;
-use std::convert::Into;
-use std::convert::From;
 
 use draw::Vertex;
 use glium::backend::Facade;
@@ -111,7 +109,7 @@ impl Terrain {
 impl Drawable for Terrain {
 	fn draw(&self, target:&mut glium::Frame, params:&glium::DrawParameters, mvp_matrix:&Mat4<f32>) {
 		/*Into::<[[f32; 4]; 4]>::into(matrix)*/
-		target.draw(&self.vertex_buffer,&self.index_buffer,self.shader.as_ref(),&uniform! { mvpMatrix:[[f32; 4]; 4].from(mvp_matrix) },params);
+		target.draw(&self.vertex_buffer,&self.index_buffer,self.shader.as_ref(),&uniform! { mvpMatrix:*mvp_matrix.as_ref() },params);
 		//target.draw(&vertex_buffer,&indices,&program,&glium::uniforms::EmptyUniforms,&params).unwrap();
 	}
 }
