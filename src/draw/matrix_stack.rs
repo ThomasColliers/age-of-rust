@@ -24,7 +24,7 @@ impl MatrixStack {
 		self.stack[len-1] = mtrx;
 	}
 	pub fn get_matrix(&mut self) -> &Mat4<f32> {
-		return &self.stack.last();
+		return &self.stack.last().unwrap();
 	}
 	pub fn push(&mut self){
 		let mut new = self.stack.last().unwrap().clone();
