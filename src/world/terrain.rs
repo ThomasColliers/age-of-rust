@@ -100,8 +100,6 @@ impl Terrain {
 			index_buffer:index_buffer,
 		};
 
-		println!("{:?}", terrain.frame);
-
 		terrain
 	}
 }

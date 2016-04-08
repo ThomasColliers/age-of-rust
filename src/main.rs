@@ -12,7 +12,7 @@ mod draw;
 use world::terrain::Terrain;
 use draw::shaders::ShaderManager;
 use draw::matrix_stack::MatrixStack;
-use draw::display_object::Drawable;
+use draw::display_object::{Drawable,Frame};
 use na::PerspMat3;
 
 
@@ -34,6 +34,9 @@ fn main() {
 	// set up the matrix stacks
 	let mut modelview_stack = MatrixStack::new();
 	let mut projection_stack = MatrixStack::new();
+
+	// camera frame
+	let mut camera_frame = Frame::<f32>::new();
 
 	// view frustum
 	let display_size = display.get_window().unwrap().get_inner_size_pixels().unwrap();
@@ -60,12 +63,19 @@ fn main() {
     	// clear the background
     	target.clear_color_and_depth((0.0, 0.0, 0.0, 1.0),1.0);
 
+    	// set up camera
+    	camera_frame.set_origin(0.0,0.0,10.0);
+    	camera_frame.look_at(0.0,0.0,0.0);
+
+    	// set up modelview_stack
+    	modelview_stack.push();
+
+
     	// draw the terrain
     	let mvp_matrix = *projection_stack.get_matrix() * *modelview_stack.get_matrix();
     	terrain.draw(&mut target,&params,&mvp_matrix);
-    	//target.draw(terrain.get_vertex_buffer(),terrain.get_index_buffer(),terrain.get_shader(),&glium::uniforms::EmptyUniforms,&params).unwrap();
 
-    	//target.draw(&vertex_buffer,&indices,&program,&glium::uniforms::EmptyUniforms,&params).unwrap();
+    	modelview_stack.pop();
 
     	// finish drawing and destroy frame object
     	target.finish().unwrap();
