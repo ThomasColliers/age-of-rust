@@ -23,6 +23,10 @@ impl MatrixStack {
 		let len = self.stack.len();
 		self.stack[len-1] = mtrx;
 	}
+	pub fn mult_matrix(&mut self, &mtrx:Mat4<f32>){
+		let len = self.stack.len();
+		self.stack[len-1] = self.stack[len-1] * mtrx;
+	}
 	pub fn get_matrix(&mut self) -> &Mat4<f32> {
 		return &self.stack.last().unwrap();
 	}

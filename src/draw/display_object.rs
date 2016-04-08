@@ -67,6 +67,11 @@ impl<T: Float+Num+NumCast+Zero+One+BaseFloat> Frame<T> {
 			self.up = cross(&target,&right);
 		}
 	}
+
+	// matrix has no translation information and is transposed
+	pub fn get_camera_matrix(&mut self) -> Mat4<T> {
+		
+	}
 }
 
 pub trait Drawable {

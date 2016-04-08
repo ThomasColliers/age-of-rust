@@ -64,12 +64,12 @@ fn main() {
     	target.clear_color_and_depth((0.0, 0.0, 0.0, 1.0),1.0);
 
     	// set up camera
-    	camera_frame.set_origin(0.0,0.0,10.0);
+    	camera_frame.set_origin(5.0,5.0,10.0);
     	camera_frame.look_at(0.0,0.0,0.0);
 
     	// set up modelview_stack
     	modelview_stack.push();
-
+    	modelview_stack.mult_matrix(camera_frame.get_camera_matrix());
 
     	// draw the terrain
     	let mvp_matrix = *projection_stack.get_matrix() * *modelview_stack.get_matrix();
