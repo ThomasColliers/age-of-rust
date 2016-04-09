@@ -69,7 +69,7 @@ fn main() {
 
     	// set up modelview_stack
     	modelview_stack.push();
-    	modelview_stack.mult_matrix(camera_frame.get_camera_matrix());
+    	modelview_stack.mult_matrix(&camera_frame.get_camera_matrix(false));
 
     	// draw the terrain
     	let mvp_matrix = *projection_stack.get_matrix() * *modelview_stack.get_matrix();
