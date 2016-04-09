@@ -4,7 +4,7 @@ version = "0.1.0"
 dependencies = [
  "glium 0.13.5 (git+https://github.com/tomaka/glium)",
  "glutin 0.4.9 (git+https://github.com/tomaka/glutin)",
- "nalgebra 0.6.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "nalgebra 0.6.0 (git+https://github.com/sebcrozet/nalgebra)",
  "num 0.1.31 (registry+https://github.com/rust-lang/crates.io-index)",
  "rand 0.3.14 (registry+https://github.com/rust-lang/crates.io-index)",
  "time 0.1.35 (registry+https://github.com/rust-lang/crates.io-index)",
@@ -335,7 +335,7 @@ dependencies = [
 [[package]]
 name = "nalgebra"
 version = "0.6.0"
-source = "registry+https://github.com/rust-lang/crates.io-index"
+source = "git+https://github.com/sebcrozet/nalgebra#f8c925c0962df8c7ee9eaac526c5052f58b0fd18"
 dependencies = [
  "num 0.1.31 (registry+https://github.com/rust-lang/crates.io-index)",
  "rand 0.3.14 (registry+https://github.com/rust-lang/crates.io-index)",

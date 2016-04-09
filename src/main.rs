@@ -33,7 +33,6 @@ fn main() {
 
 	// set up the matrix stacks
 	let mut modelview_stack = MatrixStack::new();
-	let mut projection_stack = MatrixStack::new();
 
 	// camera frame
 	let mut camera_frame = Frame::<f32>::new();
@@ -41,8 +40,6 @@ fn main() {
 	// view frustum
 	let display_size = display.get_window().unwrap().get_inner_size_pixels().unwrap();
 	let mut frustum = PerspMat3::<f32>::new(display_size.0 as f32/display_size.1 as f32, 35f32, 1f32, 5000f32);
-	// update the projection matrix
-	projection_stack.load_matrix(frustum.as_mat().clone());
 
 	// setup the shaders
 	let mut shader_manager = ShaderManager::new(&display);
@@ -52,10 +49,15 @@ fn main() {
 
     // listen for events produced in the window and wait to be received
     let mut t:u64 = time::precise_time_ns();
+    let mut x:f32 = 0.0;
+    let mut y:f32 = 0.0;
+    let mut z:f32 = 5.0;
     loop {
     	let nt = time::precise_time_ns();
     	let dt = nt - t;
     	t = nt;
+
+    	y += (dt as f32/16000000 as f32) / 5 as f32;
 
     	// get reference to the frame
     	let mut target = display.draw();
@@ -64,7 +66,7 @@ fn main() {
     	target.clear_color_and_depth((0.0, 0.0, 0.0, 1.0),1.0);
 
     	// set up camera
-    	camera_frame.set_origin(5.0,5.0,10.0);
+    	camera_frame.set_origin(x,y,z);
     	camera_frame.look_at(0.0,0.0,0.0);
 
     	// set up modelview_stack
@@ -72,7 +74,7 @@ fn main() {
     	modelview_stack.mult_matrix(&camera_frame.get_camera_matrix(false));
 
     	// draw the terrain
-    	let mvp_matrix = *projection_stack.get_matrix() * *modelview_stack.get_matrix();
+    	let mvp_matrix = *frustum.as_mat() * *modelview_stack.get_matrix();
     	terrain.draw(&mut target,&params,&mvp_matrix);
 
     	modelview_stack.pop();
@@ -86,7 +88,6 @@ fn main() {
 	    		glium::glutin::Event::Resized(width, height) => {
 	    			// update the view frustum and projection matrix
 	    			frustum.set_aspect(width as f32/height as f32);
-	    			projection_stack.load_matrix(frustum.as_mat().clone());
 	    		},
 	    		_ => ()
 	    	}
