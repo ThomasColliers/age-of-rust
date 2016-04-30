@@ -17,7 +17,7 @@ use cgmath::{Matrix4,Point3,Vector3};
 fn main() {
 	use glium::{DisplayBuild, Surface};
 	// can not do multisampling due to glutin bug with_multisampling(16)
-	let display = glium::glutin::WindowBuilder::new().with_vsync().with_depth_buffer(24).build_glium().unwrap();
+	let display = glium::glutin::WindowBuilder::new().with_vsync().with_multisampling(16).with_depth_buffer(24).build_glium().unwrap();
 
 	// draw parametres
 	let params = glium::DrawParameters {
