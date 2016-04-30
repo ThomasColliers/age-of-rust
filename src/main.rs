@@ -1,7 +1,7 @@
 #[macro_use]
 extern crate glium;
 
-extern crate nalgebra as na;
+extern crate cgmath;
 extern crate rand;
 extern crate num;
 extern crate time;
@@ -11,10 +11,8 @@ mod draw;
 
 use world::terrain::Terrain;
 use draw::shaders::ShaderManager;
-use draw::matrix_stack::MatrixStack;
 use draw::display_object::{Drawable,Frame};
-use na::PerspMat3;
-
+use cgmath::{Matrix4};
 
 fn main() {
 	use glium::{DisplayBuild, Surface};
@@ -31,15 +29,9 @@ fn main() {
 		.. Default::default()
 	};
 
-	// set up the matrix stacks
-	let mut modelview_stack = MatrixStack::new();
-
-	// camera frame
-	let mut camera_frame = Frame::<f32>::new();
-
 	// view frustum
 	let display_size = display.get_window().unwrap().get_inner_size_pixels().unwrap();
-	let mut frustum = PerspMat3::<f32>::new(display_size.0 as f32/display_size.1 as f32, 35f32, 1f32, 5000f32);
+	let mut perspective_matrix:Matrix4<f32> = cgmath::perspective(cgmath::deg(45.0),display_size.0 as f32/display_size.1 as f32,0.0001,100.0);
 
 	// setup the shaders
 	let mut shader_manager = ShaderManager::new(&display);
@@ -51,13 +43,14 @@ fn main() {
     let mut t:u64 = time::precise_time_ns();
     let mut x:f32 = 0.0;
     let mut y:f32 = 0.0;
-    let mut z:f32 = 5.0;
+    let mut z:f32 = 0.0;
     loop {
     	let nt = time::precise_time_ns();
     	let dt = nt - t;
     	t = nt;
 
-    	y += (dt as f32/16000000 as f32) / 5 as f32;
+    	// update position
+    	//z += (dt as f32/16000000 as f32) / 5 as f32;
 
     	// get reference to the frame
     	let mut target = display.draw();
@@ -65,29 +58,21 @@ fn main() {
     	// clear the background
     	target.clear_color_and_depth((0.0, 0.0, 0.0, 1.0),1.0);
 
-    	// set up camera
-    	camera_frame.set_origin(x,y,z);
-    	camera_frame.look_at(0.0,0.0,0.0);
-
-    	// set up modelview_stack
-    	modelview_stack.push();
-    	modelview_stack.mult_matrix(&camera_frame.get_camera_matrix(false));
-
     	// draw the terrain
-    	let mvp_matrix = *frustum.as_mat() * *modelview_stack.get_matrix();
+    	let mvp_matrix = perspective_matrix;
+    	//let mut mvp_matrix = Into::<[[f32; 4]; 4]>::into(perspective_matrix);
     	terrain.draw(&mut target,&params,&mvp_matrix);
-
-    	modelview_stack.pop();
 
     	// finish drawing and destroy frame object
     	target.finish().unwrap();
 
+    	// render loop
 	    for ev in display.poll_events(){
 	    	match ev {
 	    		glium::glutin::Event::Closed => return,
 	    		glium::glutin::Event::Resized(width, height) => {
-	    			// update the view frustum and projection matrix
-	    			frustum.set_aspect(width as f32/height as f32);
+	    			// update the perspective_matrix
+	    			perspective_matrix = cgmath::perspective(cgmath::deg(45.0),width as f32/height as f32,0.0001,100.0);
 	    		},
 	    		_ => ()
 	    	}

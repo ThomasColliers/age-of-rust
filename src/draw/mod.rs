@@ -1,6 +1,5 @@
 pub mod shaders;
 pub mod display_object;
-pub mod matrix_stack;
 
 #[derive(Copy, Clone)]
 pub struct Vertex {
