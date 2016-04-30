@@ -12,7 +12,7 @@ mod draw;
 use world::terrain::Terrain;
 use draw::shaders::ShaderManager;
 use draw::display_object::{Drawable,Frame};
-use cgmath::{Matrix4};
+use cgmath::{Matrix4,Point3,Vector3};
 
 fn main() {
 	use glium::{DisplayBuild, Surface};
@@ -29,9 +29,15 @@ fn main() {
 		.. Default::default()
 	};
 
-	// view frustum
+	// perspective_matrix
 	let display_size = display.get_window().unwrap().get_inner_size_pixels().unwrap();
 	let mut perspective_matrix:Matrix4<f32> = cgmath::perspective(cgmath::deg(45.0),display_size.0 as f32/display_size.1 as f32,0.0001,100.0);
+
+	// view matrix
+	let mut camera_position:Point3<f32> = Point3::new(0.0, 2.0, 2.0);
+	let mut camera_target:Point3<f32> = Point3::new(0.0, 0.0, 0.0);
+	let mut camera_up:Vector3<f32> = Vector3::unit_y();
+	let mut view_matrix:Matrix4<f32> = cgmath::Matrix4::look_at(camera_position, camera_target, camera_up);
 
 	// setup the shaders
 	let mut shader_manager = ShaderManager::new(&display);
@@ -41,15 +47,15 @@ fn main() {
 
     // listen for events produced in the window and wait to be received
     let mut t:u64 = time::precise_time_ns();
-    let mut x:f32 = 0.0;
-    let mut y:f32 = 0.0;
-    let mut z:f32 = 0.0;
     loop {
     	let nt = time::precise_time_ns();
     	let dt = nt - t;
     	t = nt;
 
     	// update position
+    	camera_position.y += (dt as f32/16000000 as f32) / 5 as f32;
+    	camera_position.z += (dt as f32/16000000 as f32) / 5 as f32;
+    	view_matrix = cgmath::Matrix4::look_at(camera_position, camera_target, camera_up);
     	//z += (dt as f32/16000000 as f32) / 5 as f32;
 
     	// get reference to the frame
@@ -59,8 +65,7 @@ fn main() {
     	target.clear_color_and_depth((0.0, 0.0, 0.0, 1.0),1.0);
 
     	// draw the terrain
-    	let mvp_matrix = perspective_matrix;
-    	//let mut mvp_matrix = Into::<[[f32; 4]; 4]>::into(perspective_matrix);
+    	let mvp_matrix = perspective_matrix * view_matrix;
     	terrain.draw(&mut target,&params,&mvp_matrix);
 
     	// finish drawing and destroy frame object
