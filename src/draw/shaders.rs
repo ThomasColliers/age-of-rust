@@ -20,7 +20,7 @@ pub struct ShaderManager {
 }
 
 impl ShaderManager {
-	pub fn new<F>(display: &F) -> ShaderManager where F: Facade + Clone {
+	pub fn new() -> ShaderManager {
 		ShaderManager {
 			shaders:HashMap::new(),
 		}
@@ -76,10 +76,4 @@ impl ShaderManager {
 
 		Ok(program.clone())
 	}
-}
-
-struct ShaderSource {
-	vertex:String,
-	fragment:String,
-	geometry:Option<String>,
 }

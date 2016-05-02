@@ -9,9 +9,7 @@ use draw::display_object::{Frame,Drawable,HasFrame};
 use draw::shaders::ShaderManager;
 use glium::program::Program;
 use glium::{VertexBuffer,IndexBuffer,Surface};
-use glium::uniforms::AsUniformValue;
 use cgmath::{Matrix4};
-use cgmath::SquareMatrix;
 
 #[derive(Debug, Copy, Clone)]
 pub enum TerrainType {
@@ -53,7 +51,7 @@ impl Terrain {
 		];
 		let mut rng = thread_rng();
 		let mut terrain_data = Vec::with_capacity((size*size) as usize);
-		for n in 0..(size*size) {
+		for _ in 0..(size*size) {
 			terrain_data.push(Tile { typ:*rng.choose(&choices).unwrap(), height:rng.gen::<f32>() });
 		}
 
@@ -63,7 +61,6 @@ impl Terrain {
 		let mut vertices = Vec::new();
 		let size_f = size as f32;
 		for index in 0..(size*size) {
-			let index_f = index as f32;
 			let row = index / size;
 			let column = index % size;
 			// TODO: generate the actual normals
@@ -93,7 +90,7 @@ impl Terrain {
 		let index_buffer = glium::IndexBuffer::new(display, glium::index::PrimitiveType::TrianglesList, &indices).unwrap();
 
 		// create the terrain data
-		let mut terrain = Terrain {
+		let terrain = Terrain {
 			data:terrain_data,
 			frame:Frame::<f32>::new(),
 			shader:shader,
@@ -107,7 +104,7 @@ impl Terrain {
 
 impl Drawable for Terrain {
 	fn draw(&self, target:&mut glium::Frame, params:&glium::DrawParameters, mvp_matrix:&Matrix4<f32>) {
-		target.draw(&self.vertex_buffer,&self.index_buffer,self.shader.as_ref(),&uniform! { mvpMatrix:Into::<[[f32; 4]; 4]>::into(*mvp_matrix) },params);
+		target.draw(&self.vertex_buffer,&self.index_buffer,self.shader.as_ref(),&uniform! { mvpMatrix:Into::<[[f32; 4]; 4]>::into(*mvp_matrix) },params).ok().expect("Drawing failed.");
 	}
 }
 
