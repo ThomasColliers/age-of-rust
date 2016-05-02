@@ -34,7 +34,7 @@ fn main() {
 	let mut perspective_matrix:Matrix4<f32> = cgmath::perspective(cgmath::deg(45.0),display_size.0 as f32/display_size.1 as f32,0.0001,100.0);
 
 	// view matrix
-	let mut camera_position:Point3<f32> = Point3::new(0.0, 2.0, 2.0);
+	let mut camera_position:Point3<f32> = Point3::new(0.0, 15.0, 0.0);
 	let mut camera_target:Point3<f32> = Point3::new(0.0, 0.0, 0.0);
 	let mut camera_up:Vector3<f32> = Vector3::unit_y();
 	let mut view_matrix:Matrix4<f32> = cgmath::Matrix4::look_at(camera_position, camera_target, camera_up);
@@ -46,17 +46,19 @@ fn main() {
 	let terrain = Terrain::new(&display,&mut shader_manager,5);
 
     // listen for events produced in the window and wait to be received
-    let mut t:u64 = time::precise_time_ns();
+    let mut old_time:u64 = time::precise_time_ns();
+    let mut starting_time:u64 = old_time;
     loop {
-    	let nt = time::precise_time_ns();
-    	let dt = nt - t;
-    	t = nt;
+    	let new_time = time::precise_time_ns();
+    	let delta_time = new_time - old_time;
+    	old_time = new_time;
+    	let total_time = new_time - starting_time;
 
     	// update position
-    	camera_position.y += (dt as f32/16000000 as f32) / 5 as f32;
-    	camera_position.z += (dt as f32/16000000 as f32) / 5 as f32;
+    	let seconds = total_time as f32/1600000000.0;
+    	camera_position.x = seconds.sin() * 25.0;
+    	camera_position.z = seconds.cos() * 25.0;
     	view_matrix = cgmath::Matrix4::look_at(camera_position, camera_target, camera_up);
-    	//z += (dt as f32/16000000 as f32) / 5 as f32;
 
     	// get reference to the frame
     	let mut target = display.draw();

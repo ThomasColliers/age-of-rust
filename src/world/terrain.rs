@@ -54,7 +54,7 @@ impl Terrain {
 		let mut rng = thread_rng();
 		let mut terrain_data = Vec::with_capacity((size*size) as usize);
 		for n in 0..(size*size) {
-			terrain_data.push(Tile { typ:*rng.choose(&choices).unwrap(), height:0f32 });
+			terrain_data.push(Tile { typ:*rng.choose(&choices).unwrap(), height:rng.gen::<f32>() });
 		}
 
 		// generate the geometry
@@ -67,7 +67,7 @@ impl Terrain {
 			let row = index / size;
 			let column = index % size;
 			// TODO: generate the actual normals
-			vertices.push(Vertex { position:[column as f32, row as f32, terrain_data[index as usize].height], texcoords:[column as f32/size_f,row as f32/size_f], normal:[0f32,0f32,1f32] });
+			vertices.push(Vertex { position:[column as f32 - size as f32 / 2.0, terrain_data[index as usize].height, row as f32 - size as f32 / 2.0], texcoords:[column as f32/size_f,row as f32/size_f], normal:[0f32,0f32,1f32] });
 		}
 
 		// create the vertex buffer
