@@ -50,6 +50,9 @@ fn main() {
 	let mut perspective_matrix:Matrix4<f32> = cgmath::perspective(cgmath::deg(45.0),display_size.0 as f32/display_size.1 as f32,0.0001,100.0);
 
 	// view matrix
+    let mut camera_rotation = 0f32;
+    let mut camera_height = 1f32;
+
 	let mut camera_position:Vector3<f32> = Vector3::new(0.0, 15.0, 0.0);
 	let camera_target:Point3<f32> = Point3::new(0.0, 0.0, 0.0);
 	let camera_up:Vector3<f32> = Vector3::unit_y();
@@ -63,8 +66,6 @@ fn main() {
     // listen for events produced in the window and wait to be received
     let mut old_time:u64 = time::precise_time_ns();
     let mut starting_time:u64 = old_time;
-    let mut camera_rotation = 0f32;
-    let mut camera_height = 1f32;
     // render loop
     loop {
     	let new_time = time::precise_time_ns();
@@ -97,7 +98,7 @@ fn main() {
 
     	// event loop
 	    for ev in display.poll_events(){
-	    	println!("{:?}", ev);
+	    	//println!("{:?}", ev);
 	    	match ev {
 	    		glium::glutin::Event::Closed => return,
 	    		glium::glutin::Event::Focused(focus) => {
@@ -117,6 +118,17 @@ fn main() {
 	    			camera_height += y as f32 / 25f32;
 	    			if camera_height > 170.0 { camera_height = 170.0; }
 	    			if camera_height < 1.0 { camera_height = 1.0; }
+            	},
+            	glium::glutin::Event::MouseWheel(delta, _) => {
+            		match delta {
+            			glium::glutin::MouseScrollDelta::LineDelta(x, y) => {
+            				camera_position.y -= y * 3.0;
+            				if camera_position.y < 5.0 {
+            					camera_position.y = 5.0;
+            				}
+            			}
+            			_ => ()
+            		}
             	},
 	    		_ => ()
 	    	}
