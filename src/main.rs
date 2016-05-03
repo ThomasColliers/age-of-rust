@@ -1,6 +1,7 @@
 #[macro_use]
 extern crate glium;
 
+extern crate core;
 extern crate cgmath;
 extern crate rand;
 extern crate num;
@@ -9,10 +10,12 @@ extern crate time;
 mod world;
 mod draw;
 
+use core::convert::Into;
 use world::terrain::Terrain;
 use draw::shaders::ShaderManager;
 use draw::display_object::{Drawable};
-use cgmath::{Matrix4,Point3,Vector3};
+use cgmath::prelude::*;
+use cgmath::{Matrix4,Point3,Vector3,Basis3, Deg, Euler, Quaternion};
 
 fn main() {
 	use glium::{DisplayBuild, Surface};
@@ -47,7 +50,7 @@ fn main() {
 	let mut perspective_matrix:Matrix4<f32> = cgmath::perspective(cgmath::deg(45.0),display_size.0 as f32/display_size.1 as f32,0.0001,100.0);
 
 	// view matrix
-	let mut camera_position:Point3<f32> = Point3::new(0.0, 15.0, 0.0);
+	let mut camera_position:Vector3<f32> = Vector3::new(0.0, 15.0, 0.0);
 	let camera_target:Point3<f32> = Point3::new(0.0, 0.0, 0.0);
 	let camera_up:Vector3<f32> = Vector3::unit_y();
 
@@ -60,18 +63,24 @@ fn main() {
     // listen for events produced in the window and wait to be received
     let mut old_time:u64 = time::precise_time_ns();
     let mut starting_time:u64 = old_time;
+    let mut camera_rotation = 0f32;
+    let mut camera_height = 1f32;
     // render loop
     loop {
     	let new_time = time::precise_time_ns();
     	let delta_time = new_time - old_time;
     	old_time = new_time;
     	let total_time = new_time - starting_time;
+		let seconds_passed = total_time as f32/1600000000.0;
 
-    	// update position
-    	let seconds = total_time as f32/1600000000.0;
-    	camera_position.x = seconds.sin() * 25.0;
-    	camera_position.z = seconds.cos() * 25.0;
-    	let view_matrix:Matrix4<f32> = cgmath::Matrix4::look_at(camera_position, camera_target, camera_up);
+		// stores the camera rotation
+		let rotation = Quaternion::from(Euler {
+			x:Deg::new(camera_height),
+			y:Deg::new(camera_rotation),
+			z:Deg::new(0.0),
+		});
+		let rotated_position = rotation * camera_position;
+    	let view_matrix:Matrix4<f32> = cgmath::Matrix4::look_at(Point3::<f32>::from((rotated_position.x,rotated_position.y,rotated_position.z)), camera_target, camera_up);
 
     	// get reference to the frame
     	let mut target = display.draw();
@@ -101,8 +110,13 @@ fn main() {
 	    			display_size = window.get_inner_size_pixels().unwrap();
 	    			perspective_matrix = cgmath::perspective(cgmath::deg(45.0),display_size.0 as f32/display_size.1 as f32,0.0001,100.0);
 	    		},
-	    		a @ glium::glutin::Event::MouseInput(_, _) => {
-                	println!("{:?}", a);
+	    		glium::glutin::Event::MouseMoved(x, y) => {
+	    			let x = x - display_size.0 as i32/2;
+	    			camera_rotation += x as f32 / 25f32;
+	    			let y = y - display_size.1 as i32/2;
+	    			camera_height += y as f32 / 25f32;
+	    			if camera_height > 170.0 { camera_height = 170.0; }
+	    			if camera_height < 1.0 { camera_height = 1.0; }
             	},
 	    		_ => ()
 	    	}
